@@ -1,0 +1,33 @@
+name: Rafraîchir le jeton Instagram
+
+# Le jeton longue durée expire après 60 jours. On le rafraîchit le 1er et le 15.
+on:
+  schedule:
+    - cron: "41 9 1,15 * *"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rafraîchir
+        id: r
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          TOKEN_OUT: ${{ runner.temp }}/tok
+        run: python pipeline/refresh_token.py
+      - name: Enregistrer le nouveau jeton
+        if: steps.r.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::Le jeton a changé mais le secret GH_PAT est absent : mets à jour IG_ACCESS_TOKEN à la main."
+            exit 1
+          fi
+          gh secret set IG_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY" < "${{ runner.temp }}/tok"
+          echo "secret IG_ACCESS_TOKEN mis à jour"

@@ -1,0 +1,88 @@
+name: Brouillons -> rendu + PR
+
+# Claude pousse une branche drafts/AAAA-MM-JJ. Ce workflow valide chaque post,
+# fabrique les slides et les reels, les commit dans la branche et ouvre la PR.
+on:
+  push:
+    branches: ["drafts/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: drafts-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Paquets système
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-inter fonts-jetbrains-mono ffmpeg espeak-ng > /dev/null
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Dépendances Python
+        run: pip install -q pillow piper-tts
+
+      - name: Voix Piper (cache)
+        uses: actions/cache@v4
+        with:
+          path: .voices
+          key: piper-${{ hashFiles('config.json') }}
+
+      - name: Télécharger la voix si absente
+        run: |
+          VOICE=$(python -c "import json;print(json.load(open('config.json'))['tts']['voice'])")
+          mkdir -p .voices
+          if [ ! -f ".voices/$VOICE.onnx" ]; then
+            IFS='-' read -r LOCALE NAME QUALITY <<< "$VOICE"
+            LANG_DIR="${LOCALE%%_*}"
+            BASE="https://huggingface.co/rhasspy/piper-voices/resolve/main/$LANG_DIR/$LOCALE/$NAME/$QUALITY/$VOICE"
+            curl -fsSL "$BASE.onnx" -o ".voices/$VOICE.onnx" && curl -fsSL "$BASE.onnx.json" -o ".voices/$VOICE.onnx.json" \
+              || echo "::warning::voix $VOICE introuvable, repli sur espeak"
+          fi
+
+      - name: Valider et rendre
+        id: build
+        run: |
+          set +e
+          python pipeline/build.py | tee build.log
+          echo "status=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Commit des médias
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/queue
+          git diff --cached --quiet || git commit -q -m "rendu des médias"
+          git push -q
+
+      - name: Ouvrir ou mettre à jour la PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SHA=$(git rev-parse HEAD)
+          python pipeline/pr_body.py "$GITHUB_REPOSITORY" "$SHA" > body.md
+          BRANCH="${GITHUB_REF_NAME}"
+          if gh pr view "$BRANCH" --json number > /dev/null 2>&1; then
+            gh pr edit "$BRANCH" --body-file body.md
+          else
+            gh pr create --base main --head "$BRANCH" --title "Posts à valider : ${BRANCH#drafts/}" --body-file body.md
+          fi
+
+      - name: Échec si un post est bloqué
+        if: steps.build.outputs.status != '0'
+        run: |
+          echo "::error::Au moins un post a échoué la validation (voir build.log / la PR)."
+          exit 1

@@ -1,0 +1,36 @@
+{
+  "account": {
+    "handle": "@TON_HANDLE",
+    "niche": "tech",
+    "language": "fr"
+  },
+  "timezone": "America/Toronto",
+  "weekly_slots": [
+    {"day": "mon", "time": "12:10", "type": "reel"},
+    {"day": "tue", "time": "18:40", "type": "carousel"},
+    {"day": "wed", "time": "12:10", "type": "reel"},
+    {"day": "thu", "time": "18:40", "type": "carousel"},
+    {"day": "sat", "time": "10:20", "type": "carousel"}
+  ],
+  "quality_gates": {
+    "min_hook_score": 65,
+    "max_hashtags": 5,
+    "carousel_min_slides": 5,
+    "carousel_max_slides": 10,
+    "reel_max_seconds": 45
+  },
+  "brand": {
+    "bg": "#0B0D12",
+    "panel": "#151923",
+    "fg": "#F4F5F7",
+    "accent": "#7CFFB2",
+    "muted": "#8A93A6",
+    "code_bg": "#0F131B"
+  },
+  "tts": {
+    "engine": "piper",
+    "voice": "fr_FR-tom-medium",
+    "length_scale": 0.92
+  },
+  "graph_api_version": "v26.0"
+}

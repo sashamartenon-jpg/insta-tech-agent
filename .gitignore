@@ -1,0 +1,6 @@
+.voices/
+__pycache__/
+*.pyc
+body.md
+build.log
+new_token.txt
