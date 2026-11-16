@@ -1,0 +1,63 @@
+{
+ "id": "2026-11-24-test-carousel",
+ "type": "carousel",
+ "publish_at": "2030-01-08T18:40:00-05:00",
+ "topic": "TEST DE RENDU - ne pas fusionner",
+ "angle": "test",
+ "hook": "Ton Mac ralentit à cause de 3 réglages cachés.",
+ "hook_formula": "#7",
+ "sources": [
+  {
+   "title": "Apple Support",
+   "url": "https://support.apple.com"
+  }
+ ],
+ "carousel": {
+  "slides": [
+   {
+    "kind": "cover",
+    "title": "Ton Mac ralentit à cause de **3 réglages cachés**",
+    "subtitle": "Le 2e est activé par défaut sur tous les Mac"
+   },
+   {
+    "kind": "text",
+    "title": "Pourquoi ça compte",
+    "body": "Chaque réglage consomme de la mémoire en arrière-plan, même quand tu ne t'en sers pas. Sur un Mac de 8 Go, la différence se voit."
+   },
+   {
+    "kind": "list",
+    "title": "Les **3 réglages**",
+    "items": [
+     "Les widgets du bureau toujours actifs",
+     "La transparence de l'interface",
+     "Les éléments d'ouverture oubliés depuis des années"
+    ]
+   },
+   {
+    "kind": "code",
+    "title": "Voir ce qui démarre",
+    "code": "$ launchctl list | grep -v com.apple\n$ ls ~/Library/LaunchAgents",
+    "lang": "zsh",
+    "note": "Tout ce qui n'est pas d'Apple apparaît ici."
+   },
+   {
+    "kind": "stat",
+    "value": "-1,2 Go",
+    "label": "de mémoire utilisée au démarrage",
+    "note": "Exemple de test, chiffre fictif pour le rendu"
+   },
+   {
+    "kind": "cta",
+    "title": "Enregistre-le",
+    "body": "Pour la prochaine fois que ton Mac rame."
+   }
+  ]
+ },
+ "caption": "Ton Mac ralentit à cause de 3 réglages cachés.\n\nLe 2e est activé par défaut. Enregistre-le pour plus tard.\n\n#mac #macos #astucetech",
+ "verification": {
+  "verdict": "pass",
+  "notes": [
+   "test"
+  ]
+ }
+}
