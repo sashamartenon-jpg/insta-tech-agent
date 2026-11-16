@@ -1,0 +1,58 @@
+{
+ "id": "2026-11-23-test-reel",
+ "type": "reel",
+ "publish_at": "2030-01-07T12:10:00-05:00",
+ "topic": "TEST DE RENDU - ne pas fusionner",
+ "angle": "test",
+ "hook": "Ton Mac chauffe à cause d'1 processus caché. Voici lequel.",
+ "hook_formula": "#7",
+ "sources": [
+  {
+   "title": "Apple",
+   "url": "https://support.apple.com"
+  }
+ ],
+ "reel": {
+  "cover_title": "Pourquoi ton Mac chauffe",
+  "beats": [
+   {
+    "role": "hook",
+    "voice": "Ton terminal peut te dire pourquoi ton Mac chauffe.",
+    "screen": "Pourquoi ton Mac **chauffe**",
+    "kind": "title"
+   },
+   {
+    "role": "body",
+    "voice": "Tape cette commande, une seule.",
+    "screen": "$ top -o cpu",
+    "kind": "code"
+   },
+   {
+    "role": "body",
+    "voice": "En haut de la liste, le processus qui mange ton processeur.",
+    "screen": "Le coupable est **en haut**",
+    "kind": "text"
+   },
+   {
+    "role": "body",
+    "voice": "Dans mon test, un onglet oublié prenait quatre-vingt-dix pour cent.",
+    "screen": "90 %",
+    "kind": "stat",
+    "label": "de CPU pour un onglet"
+   },
+   {
+    "role": "cta",
+    "voice": "Envoie-le à quelqu'un dont le Mac chauffe tout le temps.",
+    "screen": "Ton Mac **chauffe** ? Regarde en haut.",
+    "kind": "text"
+   }
+  ]
+ },
+ "caption": "Ton Mac chauffe ? Une commande suffit pour trouver le coupable.\n\nEnvoie-le à quelqu'un dont le Mac chauffe tout le temps.\n\n#mac #terminal #astucetech",
+ "verification": {
+  "verdict": "pass",
+  "notes": [
+   "test"
+  ]
+ }
+}
