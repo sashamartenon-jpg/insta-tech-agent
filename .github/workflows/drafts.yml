@@ -33,7 +33,7 @@ jobs:
           cache: pip
 
       - name: Dépendances Python
-        run: pip install -q pillow piper-tts
+        run: pip install -q -r requirements.txt
 
       - name: Voix Piper (cache)
         uses: actions/cache@v4
